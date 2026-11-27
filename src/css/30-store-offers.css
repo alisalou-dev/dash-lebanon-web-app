@@ -1,0 +1,6 @@
+.so-live-card{padding:16px;margin-bottom:1rem}
+
+/* Mobile touch and spacing refinements */
+.cats-row{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;gap:.4rem;padding:0 .2rem .45rem;margin-inline:-.2rem}
+.cats-row .pill{scroll-snap-align:start;min-height:44px;padding-inline:.85rem;border-radius:999px}
+@media(max-width:600px){.page{padding-inline:.7rem}.admin-fab-save .btn{min-height:48px}}

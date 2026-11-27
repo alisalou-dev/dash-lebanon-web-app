@@ -1,0 +1,273 @@
+/* Dash Lebanon — shared UI additions: unified loader, icons, auth extras.
+   Uses the existing theme variables only (no new colors). */
+.sqa{display:inline-flex;align-items:center;gap:3px;vertical-align:middle;line-height:1}
+.sqa i{display:block;width:5px;height:5px;border-radius:1px;background:currentColor;opacity:.25;animation:sqa 1.05s ease-in-out infinite}
+.sqa i:nth-child(1){animation-delay:0s}.sqa i:nth-child(2){animation-delay:.1s}.sqa i:nth-child(3){animation-delay:.2s}
+.sqa i:nth-child(4){animation-delay:.3s}.sqa i:nth-child(5){animation-delay:.4s}.sqa i:nth-child(6){animation-delay:.5s}.sqa i:nth-child(7){animation-delay:.6s}
+.sqa-lg{display:flex;justify-content:center;gap:5px;color:var(--primary)}
+.sqa-lg i{width:10px;height:10px;border-radius:2px}
+@keyframes sqa{0%,100%{opacity:.25;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.sqa i{animation:none;opacity:.7}}
+.btn[disabled] .sqa{margin-inline-end:6px}
+/* Inline SVG icons that replace emoji */
+.dl-ic{display:inline-block;width:1.1em;height:1.1em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dl-ic.fill{fill:currentColor;stroke:none}
+.mn-ico .dl-ic{width:1.35em;height:1.35em}
+.wa-fab .dl-ic{width:26px;height:26px}
+/* Auth extras */
+.finput[type=date]{min-height:42px}
+.fhint{font-size:.76rem;color:var(--muted);margin-top:4px}
+
+/* ===== Bottom navigation: circles seated in a real notch ===== */
+@property --mn-a { syntax: '<percentage>'; inherits: true; initial-value: 10%; }
+@media (max-width: 859px) {
+  .mn-bar {
+    --mn-r: 33px;                       /* notch radius = circle radius (27) + 6px gap */
+    background: none; border-top: 0; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    transition: --mn-a .38s var(--spring, cubic-bezier(.34,1.4,.64,1));
+  }
+  .mn-bar::before {                     /* the visible bar, with two round holes cut in its top edge */
+    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    -webkit-mask: radial-gradient(circle var(--mn-r) at var(--mn-a) 0, #0000 calc(100% - 1px), #000 100%),
+                  radial-gradient(circle var(--mn-r) at 50% 0, #0000 calc(100% - 1px), #000 100%);
+    -webkit-mask-composite: source-in;
+    mask: radial-gradient(circle var(--mn-r) at var(--mn-a) 0, #0000 calc(100% - 1px), #000 100%),
+          radial-gradient(circle var(--mn-r) at 50% 0, #0000 calc(100% - 1px), #000 100%);
+    mask-composite: intersect;
+  }
+  /* active circle: 54px, its centre sits exactly on the bar's top line */
+  .mn-dot { top: -27px; height: 54px; z-index: 1; }
+  .mn-dot::before {
+    width: 54px; height: 54px; border: 0;
+    background: linear-gradient(145deg, var(--primary), var(--primary-dk));
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  /* icon centred in that circle: normal icon centre is 23px below the line -> move up exactly 23px */
+  .mn-item.on .mn-ico { transform: translateY(-23px); }
+  .mn-item.on:active .mn-ico { transform: translateY(-23px) scale(.94); }
+  /* plus button: same size, same centre line */
+  .mn-plus {
+    top: -27px; width: 54px; height: 54px; margin-left: -27px; border: 0; z-index: 3;
+    display: grid; place-items: center; padding: 0; font-size: 1.9rem; line-height: 1;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  /* floating buttons must clear the raised circles; the AI bubble is replaced by the Chat tab */
+  .wa-fab { bottom: calc(108px + env(safe-area-inset-bottom)); }
+  body.has-mnav:not(.has-sticky-bar) .ai-fab { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) { .mn-bar { transition: none; } }
+
+/* ===== Points: redeem card + my coupons ===== */
+.rd-chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.rd-chip{flex:1 1 90px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);border-radius:12px;padding:10px 6px;font-weight:800;cursor:pointer;text-align:center}
+.rd-chip small{display:block;font-weight:600;color:var(--muted);font-size:.7rem;margin-top:2px}
+.rd-chip.on{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,transparent)}
+.rd-chip[disabled]{opacity:.45;cursor:not-allowed}
+.cp-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--border)}
+.cp-row:first-of-type{border-top:0}
+.cp-main{flex:1;min-width:0}
+.cp-code{font-family:var(--font-m);font-weight:800;letter-spacing:.04em;word-break:break-all}
+.cp-meta{font-size:.74rem;color:var(--muted);margin-top:2px}
+.cp-badge{font-size:.68rem;font-weight:800;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.cp-ok{background:color-mix(in srgb,var(--success) 16%,transparent);color:var(--success)}
+.cp-off{background:color-mix(in srgb,var(--muted) 18%,transparent);color:var(--muted)}
+.cp-btn{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:700;font-size:.75rem}
+.cp-new{border:2px dashed var(--primary);border-radius:14px;padding:16px;text-align:center;margin-top:12px}
+.cp-new .cp-code{font-size:1.25rem;margin:6px 0}
+
+/* Header: the Account button is for desktop; on phones the bottom bar already has Profile */
+@media (max-width: 859px) { header.site .icon-btn[aria-label="Account"] { display: none; } }
+
+/* My Orders: the "Print invoice" button was 100% wide inside a flex row on phones and covered the order.
+   On phones the row stacks (order on top, small button underneath); on desktop it stays side by side. */
+.order-row-v2 .order-invoice-btn { width: auto; min-height: 2.75rem; white-space: nowrap; }
+@media (max-width: 640px) {
+  .order-row-v2 { flex-direction: column; align-items: stretch; gap: 0; }
+  .order-row-v2 .order-row-main { width: 100%; }
+  .order-row-v2 .order-invoice-btn { width: calc(100% - 1.25rem); margin: 0 .625rem .625rem; }
+}
+
+/* =====================================================================
+   MOBILE USABILITY PASS — bigger tap targets, no zoom on inputs, nothing
+   floating over buttons. Colors and design are unchanged.
+   ===================================================================== */
+/* every device: no 300ms double-tap delay and no grey flash when tapping */
+button, a, [onclick], label, select, summary, input[type=checkbox], input[type=radio] {
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 859px) {
+  /* 1) iPhone zooms the whole page when a field is smaller than 16px; keep every field at 16px */
+  .finput, .ftextarea, .fselect, input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea { font-size: 16px; }
+
+  /* 2) tap targets: at least 40px (44px for the main ones) */
+  .back-link { min-height: 44px; padding: 10px 10px 10px 0; margin-bottom: 0; }
+  .qbtn { width: 40px; height: 40px; font-size: 1.15rem; display: inline-grid; place-items: center; padding: 0; }
+  .mini-btn { width: 36px; height: 36px; font-size: 1.05rem; display: inline-grid; place-items: center; padding: 0; }
+  .ci-rm { min-width: 40px; min-height: 40px; display: grid; place-items: center; margin: -8px -8px 0 0; font-size: 1.1rem; }
+  .wish-btn { width: 40px; height: 40px; bottom: 6px; right: 6px; }
+  .btn-icon-only, .icon-btn.btn-icon-only { width: 44px; height: 44px; min-width: 44px; padding: 0; display: grid; place-items: center; }
+  .auth-tab { min-height: 44px; }
+  .voice-clear { min-height: 40px; padding: 10px 0; }
+  .mn-item { min-height: 56px; }
+  #site-footer a, #site-footer button, footer.site a, footer.site button { min-height: 44px; display: inline-flex; align-items: center; }
+  #footer-wa, #footer-email { min-height: 44px; }
+  .qty-val { min-width: 34px; text-align: center; }
+
+  /* 3) the green WhatsApp bubble covered "Add to cart" and form fields. On phones with the bottom bar,
+        WhatsApp is in Quick actions (+), the side menu and the footer instead. */
+  body.has-mnav:not(.has-sticky-bar) .wa-fab { display: none !important; }
+
+  /* 4) the raised circles overlap the last 30px above the bar: keep the last line of every page clear of them */
+  #site-footer::after { content: ''; display: block; height: 34px; }
+
+  /* 5) quick-actions sheet must scroll on short phones */
+  .plus-sheet { max-height: 82vh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+}
+
+@media (max-width: 859px) {
+  .pcard-cta { min-height: 44px; }
+  .btn, .btn-sm { min-height: 44px; }
+  .social-icon { min-width: 44px; min-height: 44px; }
+  .mini-btn { width: 40px; height: 40px; }
+  #site-footer a, #site-footer button, footer.site a, footer.site button { padding-inline: 8px; }
+}
+
+/* ===== Auth page: split layout (brand side + form side) ===== */
+.auth-split{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100dvh - 64px);background:var(--bg)}
+.auth-side{display:flex;align-items:center;justify-content:center;padding:48px 40px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 9%,var(--bg)),color-mix(in srgb,var(--accent) 12%,var(--bg)))}
+.auth-side-in{max-width:420px;text-align:center}
+.auth-logo{width:84px;height:84px;margin:0 auto 14px;border-radius:22px;background:var(--surface);display:grid;place-items:center;box-shadow:var(--shadow-lg);overflow:hidden}
+.auth-logo img{width:100%;height:100%;object-fit:contain;padding:10px}
+.auth-logo .dot{width:34px;height:34px;border-radius:50%;background:var(--accent)}
+.auth-brand{font-family:var(--font-d);font-weight:700;font-size:1.25rem;margin-bottom:22px}
+.auth-hero{font-family:var(--font-d);font-size:clamp(1.7rem,3vw,2.5rem);line-height:1.15;font-weight:700;margin-bottom:14px}
+.auth-sub{color:var(--muted);font-size:1rem;line-height:1.6;margin-bottom:26px}
+.auth-points{list-style:none;text-align:start;border-top:1px solid var(--border)}
+.auth-points li{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border);color:var(--muted);font-size:.95rem}
+.auth-points li::before{content:'';flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.auth-main{display:flex;align-items:center;justify-content:center;padding:40px 28px;background:var(--surface)}
+.auth-main-in{width:100%;max-width:400px}
+.auth-main .finput{background:color-mix(in srgb,var(--text) 5%,var(--surface));border-radius:var(--r-md);min-height:46px}
+.auth-main .btn-primary{width:100%;min-height:48px;border-radius:var(--r-md);font-weight:700}
+.auth-main .auth-tabs{margin-bottom:18px}
+@media (max-width:859px){
+  .auth-split{grid-template-columns:1fr}
+  .auth-side{padding:28px 22px}
+  .auth-points{display:none}
+  .auth-hero{font-size:1.5rem}
+  .auth-sub{margin-bottom:0}
+  .auth-main{padding:26px 20px 90px}
+}
+
+/* ===== AI chat: microphone listening indicator ===== */
+.ai-rec{display:flex;align-items:center;gap:.6rem;margin:0 .75rem .15rem;padding:.5rem .9rem;border-radius:var(--r-pill);
+  background:color-mix(in srgb,var(--danger) 10%,var(--surface));color:var(--danger);font-size:.8rem;font-weight:600}
+.ai-rec[hidden]{display:none}
+.ai-bars{display:inline-flex;align-items:center;gap:3px;height:18px}
+.ai-bars i{display:block;width:3px;height:100%;border-radius:2px;background:currentColor;transform:scaleY(.25);animation:aiBar 1s ease-in-out infinite}
+.ai-bars i:nth-child(2){animation-delay:.12s}.ai-bars i:nth-child(3){animation-delay:.24s}
+.ai-bars i:nth-child(4){animation-delay:.36s}.ai-bars i:nth-child(5){animation-delay:.48s}
+@keyframes aiBar{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+.ai-mic.is-rec{background:var(--danger);color:#fff;border-color:var(--danger)}
+@media (prefers-reduced-motion:reduce){.ai-bars i{animation:none;transform:scaleY(.7)}}
+
+/* =====================================================================
+   Storefront look: clean light layout, centered hero, product grid,
+   feature cards, dark footer. Uses the existing Dash Lebanon variables.
+   ===================================================================== */
+:root{--font-d:'Inter',Arial,sans-serif;--amber-ink:#8a5a00}
+[data-dark="1"]{--amber-ink:#f5c46b}
+body{font-family:var(--font-b);-webkit-font-smoothing:antialiased}
+.section-title,.cat-section-title,.modal-title{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em}
+
+/* ---- hero ---- */
+.home-v2{padding-top:0}
+.hero2{text-align:center;max-width:780px;margin:0 auto;padding:clamp(40px,8vw,88px) 8px clamp(28px,5vw,44px)}
+.hero2-eyebrow{display:inline-block;margin-bottom:18px;padding:6px 14px;border-radius:var(--r-pill);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);background:var(--tint)}
+.hero2 h1{margin:0 0 14px;font-family:var(--font-d);font-weight:800;font-size:clamp(2.2rem,6.4vw,3.8rem);line-height:1.06;letter-spacing:-.035em;color:var(--text)}
+.hero2 h1 .hl{color:var(--primary)}
+.hero2 p{max-width:560px;margin:0 auto 24px;color:var(--muted);font-size:clamp(.98rem,2.3vw,1.12rem);line-height:1.6}
+.hero2-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:22px}
+.hero2-cta .btn{width:auto;flex:0 0 auto;min-width:140px;min-height:46px;padding-inline:26px;border-radius:var(--r-pill);font-weight:700}
+.btn-soft{border:0;background:color-mix(in srgb,var(--text) 7%,var(--surface));color:var(--text)}
+.btn-soft:hover{background:color-mix(in srgb,var(--text) 12%,var(--surface))}
+.hero2-search{display:flex;align-items:center;gap:8px;max-width:560px;margin:0 auto;padding:5px 5px 5px 20px;border:1.5px solid var(--border);border-radius:var(--r-pill);background:var(--surface);box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s}
+.hero2-search:focus-within{border-color:var(--primary);box-shadow:var(--focus-ring)}
+.hero2-search input{flex:1;min-width:0;padding:10px 0;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:.95rem}
+.hero2-search input::-webkit-search-cancel-button{display:none}
+.hero2-search button{flex:none;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--primary);color:#fff;cursor:pointer;transition:background .2s}
+.hero2-search button:hover{background:var(--primary-dk)}
+
+/* ---- section heads + product grid ---- */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:40px 0 16px}
+.sec-title{margin:0;font-family:var(--font-d);font-weight:800;font-size:1.3rem;letter-spacing:-.025em}
+.sec-link{padding:6px 0;border:0;background:none;color:var(--primary);font-weight:700;font-size:.88rem;cursor:pointer}
+.sec-link:hover{text-decoration:underline}
+.pgrid2,#pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:640px){.pgrid2,#pgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+@media(min-width:960px){.pgrid2,#pgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+
+/* ---- product card ---- */
+.pcard{padding:0;text-align:left;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);box-shadow:none;transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s}
+.pcard:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--primary) 28%,var(--border));box-shadow:var(--shadow-lg)}
+.pcard-img{border-radius:0;aspect-ratio:1/1;background:color-mix(in srgb,var(--text) 4%,var(--surface))}
+.pcard-body{align-items:stretch;padding:12px 14px 14px}
+.pcard-name{min-height:2.6em;margin-bottom:6px;text-align:left;font-size:.9rem;font-weight:600;line-height:1.35}
+.pcard-price-row{margin-bottom:10px}
+.pcard-price{font-size:1.08rem;font-weight:800;color:var(--primary)}
+.pcard-old{color:var(--muted);font-size:.82rem;text-decoration:line-through}
+.pcard-foot{margin-top:10px;font-size:.74rem}
+
+/* ---- why + stats ---- */
+.why{margin-top:72px;text-align:center}
+.why-eyebrow{display:inline-block;padding:5px 14px;border-radius:var(--r-pill);font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-ink);background:color-mix(in srgb,var(--accent) 16%,var(--surface))}
+.why h2{margin:14px 0 8px;font-family:var(--font-d);font-weight:800;font-size:clamp(1.6rem,4.2vw,2.4rem);letter-spacing:-.03em}
+.why-sub{max-width:520px;margin:0 auto 28px;color:var(--muted);line-height:1.6}
+.why-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;text-align:left}
+@media(min-width:960px){.why-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
+.why-card{padding:20px;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface)}
+.why-ico{width:44px;height:44px;margin-bottom:14px;display:grid;place-items:center;border-radius:12px;background:var(--tint);color:var(--primary)}
+.why-card h3{margin:0 0 6px;font-size:1rem;font-weight:700}
+.why-card p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:36px;overflow:hidden;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--border)}
+@media(min-width:760px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{padding:26px 10px;text-align:center;background:var(--surface)}
+.stat b{display:block;font-family:var(--font-d);font-weight:800;font-size:clamp(1.8rem,4.4vw,2.6rem);line-height:1.1;letter-spacing:-.03em;color:var(--primary)}
+.stat span{display:block;margin-top:6px;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+
+/* ---- dark footer ---- */
+footer.site{margin-top:56px;padding:48px 0 26px;border-top:0;background:#0f1729;color:#aab3c5}
+footer.site .brand-word,footer.site .footer-h{color:#fff}
+footer.site .footer-h{margin-bottom:10px;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+footer.site .footer-tag{color:#aab3c5}
+footer.site .footer-col button,footer.site .footer-col a{color:#cfd6e4;transition:color .2s}
+footer.site .footer-col button:hover,footer.site .footer-col a:hover{color:#fff}
+footer.site .footer-bottom{border-top:1px solid rgba(255,255,255,.1);color:#8b95aa}
+
+@media(max-width:640px){
+  .hero2-cta .btn{flex:1 1 130px;min-width:0}
+  .sec-head{margin-top:30px}
+  .why{margin-top:52px}
+}
+
+/* icons that replace emoji */
+.dl-emo{display:inline-block;vertical-align:-.16em;flex:none}
+
+/* dark mode: brighter blue for text so it stays readable */
+[data-dark="1"] .hero2 h1 .hl,[data-dark="1"] .sec-link,[data-dark="1"] .hero2-eyebrow,[data-dark="1"] .stat b,[data-dark="1"] .pcard-price{color:#8aa6ff}
+[data-dark="1"] .hero2-eyebrow{background:color-mix(in srgb,#8aa6ff 14%,var(--surface))}
+
+/* ---- narrow phones: header must never be wider than the screen ---- */
+body{overflow-x:clip}
+@media(max-width:420px){
+  .hbar{gap:.25rem;padding-inline:.5rem}
+  .hbar-side{width:auto;flex:0 0 auto}
+  header.site .brand{flex:1 1 auto;min-width:0;margin-inline-end:0;font-size:1.12rem;gap:.375rem}
+  header.site .brand img{flex:none;height:32px;width:auto;max-width:36px;object-fit:contain}
+  header.site .brand-word{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
