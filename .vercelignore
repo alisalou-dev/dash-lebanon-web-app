@@ -1,0 +1,11 @@
+src/
+sql/
+supabase/
+build.js
+README.md
+DEPLOY-PHASE13.md
+GITHUB-PRESENTATION.md
+.env*
+*.zip
+node_modules/
+.git/

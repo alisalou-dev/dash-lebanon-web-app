@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order
+Disallow: /order-success
+Disallow: /orders
+Disallow: /chat
+Disallow: /points
+Disallow: /account
+Disallow: /favorites
+Disallow: /reset-password
+
+Sitemap: https://www.dashlb.shop/sitemap.xml
